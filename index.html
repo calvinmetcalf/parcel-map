@@ -15,8 +15,44 @@ html body {
 <script src="leaflet.js"></script>
 <script src="data.js"></script>
 <script>
-var map = L.map('map').setView([42.693850794023135, -71.11229449510576], 18);
+var map = L.map('map').setView([42.693850794023135, -71.11229449510576], 19);
+function highlightFeature(e) {
+    var layer = e.target;
 
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera) {
+        layer.bringToFront();
+    }
+}
+var andover = L.geoJson(geojson, {
+  onEachFeature: function (feature, layer) {
+
+    layer.on('mouseover', highlightFeature);
+    layer.on('mouseout', resetHighlight);
+    if (feature.properties) {
+        layer.bindPopup('<ul><li>owner: ' + feature.properties.aOWNER1 + '</li><li>address: ' + feature.properties.aSITE_ADDR + '</li></ul>');
+    }
+  },
+  style: function style(feature) {
+    return {
+        fillColor: '#43a2ca',
+        weight: 2,
+        opacity: 0.5,
+        color: 'white',
+        dashArray: '3',
+        fillOpacity: 0.7
+    };
+}
+});
+function resetHighlight(e) {
+    andover.resetStyle(e.target);
+}
 L.tileLayer('https://{s}.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 	attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	subdomains: 'abcd',
@@ -24,6 +60,6 @@ L.tileLayer('https://{s}.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
   maxZoom: 19,
 	accessToken: 'pk.eyJ1IjoiY3dtIiwiYSI6InFoYkpvS00ifQ.WHqQ_q865NKjIQB6Wpoi2w'
 }).addTo(map);
-var andover = L.geoJson(geojson);
+
 andover.addTo(map);
 </script>
