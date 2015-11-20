@@ -1,0 +1,29 @@
+<title>Andover Parcel Fun</title>
+<link rel="stylesheet" href="leaflet.css" />
+<style>
+html body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+#map {
+  height: 100%;
+  width: 100%;
+}
+</style>
+<div id="map"></div>
+<script src="leaflet.js"></script>
+<script src="data.js"></script>
+<script>
+var map = L.map('map').setView([42.693850794023135, -71.11229449510576], 18);
+
+L.tileLayer('https://{s}.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	attribution: 'Imagery from <a href="http://mapbox.com/about/maps/">MapBox</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	id: 'mapbox.streets',
+  maxZoom: 19,
+	accessToken: 'pk.eyJ1IjoiY3dtIiwiYSI6InFoYkpvS00ifQ.WHqQ_q865NKjIQB6Wpoi2w'
+}).addTo(map);
+var andover = L.geoJson(geojson);
+andover.addTo(map);
+</script>
